@@ -1,0 +1,12 @@
+﻿{
+    "_postman_variable_scope":  "environment",
+    "values":  [
+                   {
+                       "key":  "base_url",
+                       "value":  "http://127.0.0.1:8080",
+                       "enabled":  true
+                   }
+               ],
+    "name":  "Local",
+    "id":  "fab96a43-06f1-4d3c-80c4-d66095cc8152"
+}

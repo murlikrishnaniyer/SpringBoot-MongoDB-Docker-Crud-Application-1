@@ -20,4 +20,4 @@ spec:
             - containerPort: 8080
           env:
             - name: MONGO_URI
-              value: mongo-service
+              value: mongodb://mongodb:27017

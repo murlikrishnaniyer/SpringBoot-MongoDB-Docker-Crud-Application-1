@@ -23,15 +23,27 @@ $portLocal = 8080
 # Temp file for POST body
 $tempFile = Join-Path $env:TEMP "apibody-$(Get-Random).json"
 
-# Start port-forward in background
-Write-Output "Starting port-forward to $svcName:$portLocal in namespace $namespace..."
-$pfProc = Start-Process -FilePath kubectl -ArgumentList @('port-forward', "svc/$svcName", "$portLocal`:8080", '-n', $namespace) -NoNewWindow -PassThru -WindowStyle Hidden
+# Start port-forward in background if not already active
+$pfProc = $null
+$alreadyListening = $false
+try {
+    $resp = Invoke-WebRequest -Uri "$serviceUrl/findAllBooks" -UseBasicParsing -TimeoutSec 2 -ErrorAction Stop
+    $alreadyListening = $true
+    Write-Output "Port-forward already active. Reusing existing localhost:$portLocal connection."
+} catch {
+    $alreadyListening = $false
+}
+
+if (-not $alreadyListening) {
+    Write-Output "Starting port-forward to ${svcName}:${portLocal} in namespace $namespace..."
+    $pfProc = Start-Process -FilePath kubectl -ArgumentList @('port-forward', "svc/$svcName", "${portLocal}:8080", '-n', $namespace) -NoNewWindow -PassThru
+}
 
 try {
     # Wait for the port-forward to open (simple loop)
     $maxWait = 30
     $ok = $false
-    for ($i=0; $i -lt $maxWait; $i++) {
+    for ($i = 0; $i -lt $maxWait; $i++) {
         try {
             $resp = Invoke-WebRequest -Uri "$serviceUrl/findAllBooks" -UseBasicParsing -TimeoutSec 2 -ErrorAction Stop
             $ok = $true; break

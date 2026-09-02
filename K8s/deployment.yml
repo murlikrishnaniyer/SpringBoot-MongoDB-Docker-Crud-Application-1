@@ -20,6 +20,6 @@ spec:
             - containerPort: 8080
           env:
             - name: MONGO_URI
-              value: mongodb://mongodb:27017
+              value: mongodb://mongo-service:27017
             - name: SPRING_DATA_MONGODB_URI
-              value: mongodb://mongodb:27017
+              value: mongodb://mongo-service:27017

@@ -1,7 +1,6 @@
 package com.microlcafe.springmongodbcrud.api.resource;
 import com.microlcafe.springmongodbcrud.api.model.Book;
 import com.microlcafe.springmongodbcrud.api.repository.BookRepository;
-import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

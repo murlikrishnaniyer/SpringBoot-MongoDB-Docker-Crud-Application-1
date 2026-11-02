@@ -1,7 +1,6 @@
 package com.microlcafe.springmongodbcrud.api.resource;
 import com.microlcafe.springmongodbcrud.api.model.Book;
 import com.microlcafe.springmongodbcrud.api.repository.BookRepository;
-import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,7 @@ public class BookController {
     @PostMapping("/addBook")
     public String saveBook(@RequestBody Book book){
         bookRepository.save(book);
-        return "Added book with id: " + book.getId();
+        return "Added book with id: " + book.id();
     }
 
     @GetMapping("/findAllBooks")

@@ -1,0 +1,10 @@
+https://github.com/GeorgeAp/SpringBoot-MongoDB-Docker-Crud-Application/tree/master
+
+powershell -ExecutionPolicy Bypass -File .\scripts\test-api.ps1
+pwsh -ExecutionPolicy Bypass -File .\scripts\test-api.ps1
+
+to run in postman:
+kubectl port-forward service/spring-mongodb-crud-application 8080:8080
+
+
+

@@ -16,7 +16,7 @@ public class BookController {
     @PostMapping("/addBook")
     public String saveBook(@RequestBody Book book){
         bookRepository.save(book);
-        return "Added book with id: " + book.id();
+        return "Recently Added book with id: " + book.id();
     }
 
     @GetMapping("/findAllBooks")

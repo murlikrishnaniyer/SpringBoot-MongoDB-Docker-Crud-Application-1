@@ -8,16 +8,29 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: BookStore
     healthcheck:
       test: mongosh --eval 'db.adminCommand("ping")'
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    networks:
+      - springboot-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        BUILD_NUMBER: ${BUILD_NUMBER:-local}
     container_name: spring-app
     ports:
       - "8080:8080"
@@ -28,6 +41,28 @@ services:
       SPRING_DATA_MONGODB_HOST: mongodb
       SPRING_DATA_MONGODB_PORT: "27017"
       SPRING_DATA_MONGODB_DATABASE: BookStore
+      SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,metrics,info"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "when-authorized"
+    healthcheck:
+      test: curl -f http://localhost:8080/actuator/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - springboot-network
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  springboot-network:
+    driver: bridge
 
 volumes:
   mongodb_data:
+    driver: local

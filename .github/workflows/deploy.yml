@@ -2,9 +2,9 @@ name: Build, Test, and Deploy to AWS ECS
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ master, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 env:
   AWS_REGION: ap-south-2
@@ -91,7 +91,7 @@ jobs:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
     needs: [build, security-scan]
-    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    if: github.ref == 'refs/heads/master' || github.event_name == 'pull_request'
 
     permissions:
       contents: read
@@ -143,7 +143,7 @@ jobs:
     name: Deploy to AWS ECS
     runs-on: ubuntu-latest
     needs: docker-build
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
 
     permissions:
       contents: read
